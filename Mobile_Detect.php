@@ -23,7 +23,7 @@
  * @version     2.8.3
  */
 
-class Mobile_Detect
+class Mobile_Detect2
 {
     /**
      * Mobile detection type.
@@ -153,7 +153,16 @@ class Mobile_Detect
 
 		//Chrome Desktop
 		'Chrome'	=>	false,
-
+		
+		//IE10 WinRT (Surface)
+		//@reference: http://msdn.microsoft.com/fr-fr/library/ie/hh920767(v=vs.85).aspx
+		'Windows NT 6.2; ARM;'	=>	true,
+		
+		'Trident/6.0; Touch'	=>	false,
+		
+		//IE non-mobile (OEM tag follow Touch capability)
+		'Touch; '	=>	false,
+		
 		//IE mobile
 		'Touch'		=>	true,
 
