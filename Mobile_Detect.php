@@ -132,6 +132,47 @@ class Mobile_Detect
             // Seen this on a HTC.
             'HTTP_UA_CPU'                  => array('matches' => array('ARM')),
     );
+	
+	/**
+     * Ordered list of obvious/popular/fast checks for detecing mobile devices or desktop UA
+     *
+     * @var array
+     */
+    protected static $mobileChecks = array(
+		
+		//Mobile Chrome Phone + Mobile Safari (Phone + Tablet) + Android Webkit browser + Some IEs Mobile + Opera
+		//@reference: https://developers.google.com/chrome/mobile/docs/user-agent
+		//@reference: https://developer.apple.com/library/safari/documentation/appleapplications/reference/safariwebcontent/OptimizingforSafarioniPhone/OptimizingforSafarioniPhone
+		'Mobi'		=>	true,
+
+		//Mobile Chrome tablet
+		'Android'	=>	true,
+
+		//Puffin mobile (must be before Chrome because it contains it)
+		'Puffin/'	=>	true,
+
+		//Chrome Desktop
+		'Chrome'	=>	false,
+
+		//IE mobile
+		'Touch'		=>	true,
+
+		//IE Desktop
+		'MSIE'		=>	false,
+
+		//Silk mobile
+		'Silk/'		=>	true,
+
+		//HTC mobile (must be before Safari because it contains it)
+		'HTC'		=>	true,
+
+		//Safari Desktop (can't contain Chrome here)
+		'Safari'	=>	false,
+
+		//Firefox Desktop
+		//@reference: https://developer.mozilla.org/en-US/docs/Gecko_user_agent_string_reference
+		'Firefox/'	=>	false
+	);
 
     /**
      * List of mobile devices (phones).
@@ -947,15 +988,22 @@ class Mobile_Detect
      */
     public function isMobile($userAgent = null, $httpHeaders = null)
     {
-
+		if ($userAgent) {
+            $this->setUserAgent($userAgent);
+        }
+		
+		//Fastest detection checks on popular UA
+		foreach(self::$mobileChecks as $findme => $is_mobile)
+		{
+			if(strpos($this->userAgent, $findme) !== false)
+				return $is_mobile;
+		}
+		
         if ($httpHeaders) {
             $this->setHttpHeaders($httpHeaders);
         }
 
-        if ($userAgent) {
-            $this->setUserAgent($userAgent);
-        }
-
+        
         $this->setDetectionType(self::DETECTION_TYPE_MOBILE);
 
         if ($this->checkHttpHeadersForMobile()) {
