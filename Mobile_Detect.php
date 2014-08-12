@@ -928,7 +928,7 @@ class Mobile_Detect
     public function __call($name, $arguments)
     {
         //make sure the name starts with 'is', otherwise
-        if (strpos($name, 'is') === 0) {
+        if (strpos($name, 'is') !== 0) {
             throw new BadMethodCallException("No such method exists: $name");
         }
 
